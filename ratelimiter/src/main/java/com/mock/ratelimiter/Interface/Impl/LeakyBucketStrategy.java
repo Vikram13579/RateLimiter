@@ -15,7 +15,7 @@ public class LeakyBucketStrategy  implements RateLimitStrategy{
         lastLeakedTime = 0L;
         reqCount = 0;
     }
-    public void rateLimit(){
+    public boolean rateLimit() throws Exception{
         // so here.. the task is to leak the items continuously..
         // so in leaky bucket when the request arrives at the ratelimiter.. it looks , that , last request arrived some minutes ago///
         // then if the time exhauused is more than enough to let the request.. we will let it 
@@ -27,7 +27,9 @@ public class LeakyBucketStrategy  implements RateLimitStrategy{
             reqCount++;
             //return true; // Request accepted into the bucket to be processed at constant leak rate
         }
-
+        else{
+            throw new Exception(" Too many requests ");
+        }
         
     }
     private void clearCurrent(int noOfLeaked){// add synchronised to this to allow one by onw.. 

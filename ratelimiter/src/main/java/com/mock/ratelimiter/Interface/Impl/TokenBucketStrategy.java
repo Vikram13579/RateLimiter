@@ -16,18 +16,18 @@ public class TokenBucketStrategy  implements RateLimitStrategy{
         tokensPerSecond = 3;
         maxTokenHeld = 10;
     }
-    public void rateLimit(){ // add synchronized..
+    public boolean rateLimit() throws Exception{ // add synchronized..
         long currentTime = System.currentTimeMillis();
         int elapsedTime = (currentTime - lastTokenUpdatedTime);
         int addedTokens = elapsedTime * tokensPerSecond /1000;
         tokenCount = Math.min(maxTokenHeld, tokenCount + addedTokens);
         lastTokenUpdatedTime += (long) addedTokens * 1000 / tokensPerSecond;
         if(tokenCount = 0){
-            //return false;
+            throw new Exception("Too many requests");
         }
         else{
             tokenCount--;
         }
-        //return true;
+        return true;
     }
 }

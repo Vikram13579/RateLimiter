@@ -15,7 +15,7 @@ public class FixedWindowStrategy implements RateLimitStrategy{
         currentCountInThisWindow = 0;
 
     }
-    public void rateLimit(){
+    public boolean rateLimit() throws Exception{
         // this thing is that.. it will have the time intervals.. after which , it will create a new window and allow requests..
         long currentTime = System.currentTimeMillis();
         if(currentTime - lastWindowTime > windowLength){
@@ -26,6 +26,7 @@ public class FixedWindowStrategy implements RateLimitStrategy{
         }else{
             currentCountInThisWindow++;
         }
+        return true;
     }
 
 
