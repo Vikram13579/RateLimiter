@@ -25,23 +25,25 @@ public class SlidingWindowStrategy  implements RateLimitStrategy{
         totalBuckets = 100;
         totalBucketLengthInMillis = windowLength/totalBuckets;
     }
-    public void rateLimit(){
-        long currentTime = System.currentTimeMillis();
-        while(queue.peek() < (windowLength - currentTime)){
-            queue.poll(); // but as queue takes lot of time .. there is another strategy with this.. that is storying the buckets into array
-            // its like , we would keep the things into the array and 
-            // lets say windowlength 10000 millis maxreqallowed...1000 ... total buckets = 100 ... bucketlength in millis = 100
-            // buckets and buckettimestamps..
-            // current time .. 11000 - millis  current bucket index = currtime / bucket length in millis  = 110 % totalbuckets = 100 = 10 timestamp = 110 %100 = 10
-            // totoal buckets mei ... if current time - bucketTimeStamp > windowlength = set that to 0
-            // currenttimestamp != curr then change and  set buckets to 0 
-        }
-        if(queue.size() > maxReqAllowed){
-            throw new Exception(" Too many requests ");
-        }
-        queue.offer(currentTime);
+    public boolean rateLimit()throws Exception{
+        return reqAllowed();
+        //long currentTime = System.currentTimeMillis();
+        // while(queue.peek() < (windowLength - currentTime)){
+        //     queue.poll(); // but as queue takes lot of time .. there is another strategy with this.. that is storying the buckets into array
+        //     // its like , we would keep the things into the array and 
+        //     // lets say windowlength 10000 millis maxreqallowed...1000 ... total buckets = 100 ... bucketlength in millis = 100
+        //     // buckets and buckettimestamps..
+        //     // current time .. 11000 - millis  current bucket index = currtime / bucket length in millis  = 110 % totalbuckets = 100 = 10 timestamp = 110 %100 = 10
+        //     // totoal buckets mei ... if current time - bucketTimeStamp > windowlength = set that to 0
+        //     // currenttimestamp != curr then change and  set buckets to 0 
+        // }
+        // if(queue.size() > maxReqAllowed){
+        //     throw new Exception(" Too many requests ");
+        // }
+        // queue.offer(currentTime);
+        // return true;
     }
-    public boolean reqAllowed(){
+    public boolean reqAllowed() throws Exception{
         long currentTime = System.currentTimeMillis();
 
         long currentBucketIndex = (currentTime /totalBucketLengthInMillis)%totalBuckets;
@@ -65,7 +67,7 @@ public class SlidingWindowStrategy  implements RateLimitStrategy{
 
 
         if(totalReqInWindow >= maxReqAllowed){
-            return false;
+            throw new Exception("Too many requests ");
         }
 
         array.incrementAndGet(currentBucketIndex);
