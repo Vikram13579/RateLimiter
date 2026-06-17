@@ -1,4 +1,4 @@
-package main.java.com.mock.ratelimiter.Entity;
+package com.mock.ratelimiter.Entity;
 
 public class Status {
     private Long id;

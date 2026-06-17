@@ -1,10 +1,10 @@
-package main.java.com.mock.ratelimiter.Interface.Impl;
+package com.mock.ratelimiter.Interface.Impl;
 
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
-import main.java.com.mock.ratelimiter.Interface.RateLimitStrategy;
+import com.mock.ratelimiter.Interface.RateLimitStrategy;
 
 public class SlidingWindowStrategy  implements RateLimitStrategy{
     long windowLength ;
@@ -19,7 +19,7 @@ public class SlidingWindowStrategy  implements RateLimitStrategy{
     public SlidingWindowStrategy(){
         windowLength = 600;
         requestCount = 0;
-        maxRequestAllowed = 10;
+        maxReqAllowed = 10;
         array = new AtomicIntegerArray(100);
         bucketTimeStamp = new long[100];
         totalBuckets = 100;
@@ -46,7 +46,7 @@ public class SlidingWindowStrategy  implements RateLimitStrategy{
     public boolean reqAllowed() throws Exception{
         long currentTime = System.currentTimeMillis();
 
-        long currentBucketIndex = (currentTime /totalBucketLengthInMillis)%totalBuckets;
+        int currentBucketIndex = (int) ((currentTime /totalBucketLengthInMillis)%totalBuckets);
         long currentTimeStamp = (currentTime / totalBucketLengthInMillis )*totalBucketLengthInMillis;
 
         for(int i = 0;i<totalBuckets;i++){
@@ -57,7 +57,7 @@ public class SlidingWindowStrategy  implements RateLimitStrategy{
 
         if(bucketTimeStamp[currentBucketIndex] != currentTimeStamp){
             bucketTimeStamp[currentBucketIndex] = currentTimeStamp;
-            buckets.set(currentBucketIndex,0);
+            array.set(currentBucketIndex,0);
         }
 
         int totalReqInWindow =0;

@@ -1,17 +1,20 @@
-package main.java.com.mock.ratelimiter.Service;
-@Transaction
+package com.mock.ratelimiter.Service;
+
+import com.mock.ratelimiter.Factory.RateLimitFactory;
+import com.mock.ratelimiter.Interface.RateLimitStrategy;
+import com.mock.ratelimiter.enums.RateLimitType;
 public class RateLimiterService {
-    RateLimiterStrategy strategy;
+    RateLimitStrategy strategy;
     RateLimitFactory factory;
-    @Autowired
-    public void rateLimit(RateLimitType rateLimitType) throws Exception{
+  
+    public boolean rateLimit(RateLimitType rateLimitType) throws Exception{
         // so here..
         // methods to ratelimit.. fixed window counter..
         // sliding window algorithm
         // leaky bucket
         // token bucket algorithms..
         strategy = RateLimitFactory.getInstance(rateLimitType);
-        return strategy.ratelimit();
+        return strategy.rateLimit();
 
     }
 }

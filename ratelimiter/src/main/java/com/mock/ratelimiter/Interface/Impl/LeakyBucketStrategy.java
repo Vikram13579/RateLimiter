@@ -1,6 +1,6 @@
-package main.java.com.mock.ratelimiter.Interface.Impl;
+package com.mock.ratelimiter.Interface.Impl;
 
-import main.java.com.mock.ratelimiter.Interface.RateLimitStrategy;
+import com.mock.ratelimiter.Interface.RateLimitStrategy;
 
 public class LeakyBucketStrategy  implements RateLimitStrategy{
     // so leaky bucket algorithm  leaks the requests.. every second.. so either a background process would be running which 
@@ -9,6 +9,7 @@ public class LeakyBucketStrategy  implements RateLimitStrategy{
     int maxRequestsAllowedToHold ;
     long lastLeakedTime;
     int reqCount ;
+    int leaksPerSecond;
     public LeakyBucketStrategy(){
         leaksPerSecond = 1;
         maxRequestsAllowedToHold = 10;
@@ -20,7 +21,7 @@ public class LeakyBucketStrategy  implements RateLimitStrategy{
         // so in leaky bucket when the request arrives at the ratelimiter.. it looks , that , last request arrived some minutes ago///
         // then if the time exhauused is more than enough to let the request.. we will let it 
         long currTime = System.currentTimeMillis();
-        int noOfLeaked = (currTime-lastLeakedTime)/leaksPerMilliSecond;
+        int noOfLeaked = (int) ((currTime-lastLeakedTime)/leaksPerMilliSecond);
         clearCurrent(noOfLeaked);
         lastLeakedTime += noOfLeaked * leaksPerMilliSecond;
         if (reqCount < maxRequestsAllowedToHold) {
@@ -30,6 +31,7 @@ public class LeakyBucketStrategy  implements RateLimitStrategy{
         else{
             throw new Exception(" Too many requests ");
         }
+        return true;
         
     }
     private void clearCurrent(int noOfLeaked){// add synchronised to this to allow one by onw.. 

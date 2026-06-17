@@ -1,14 +1,19 @@
-package main.java.com.mock.ratelimiter.Factory;
+package com.mock.ratelimiter.Factory;
 
-import main.java.com.mock.ratelimiter.Interface.RateLimitStrategy;
-import main.java.com.mock.ratelimiter.Interface.Impl.LeakyBucketStrategy;
-import main.java.com.mock.ratelimiter.Interface.Impl.TokenBucketStrategy;
+import com.mock.ratelimiter.Interface.RateLimitStrategy;
+import com.mock.ratelimiter.Interface.Impl.FixedWindowStrategy;
+import com.mock.ratelimiter.Interface.Impl.LeakyBucketStrategy;
+import com.mock.ratelimiter.Interface.Impl.SlidingWindowStrategy;
+import com.mock.ratelimiter.Interface.Impl.TokenBucketStrategy;
+import com.mock.ratelimiter.enums.RateLimitType;
+
+
 
 public class RateLimitFactory {
     private RateLimitFactory(){
 
     }
-    public RateLimitStrategy getInstance(RateLimitType rateLimitType){
+    public static RateLimitStrategy getInstance(RateLimitType rateLimitType){
         if(rateLimitType == RateLimitType.TOKEN_BUCKET){
             return new TokenBucketStrategy();
         }else if(rateLimitType == RateLimitType.LEAKY_BUCKET){

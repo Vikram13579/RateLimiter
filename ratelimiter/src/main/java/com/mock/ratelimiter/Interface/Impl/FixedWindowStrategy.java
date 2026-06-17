@@ -1,6 +1,6 @@
-package main.java.com.mock.ratelimiter.Interface.Impl;
+package com.mock.ratelimiter.Interface.Impl;
 
-import main.java.com.mock.ratelimiter.Interface.RateLimitStrategy;
+import com.mock.ratelimiter.Interface.RateLimitStrategy;
 
 public class FixedWindowStrategy implements RateLimitStrategy{
     // usually read from the properties files..
